@@ -1,6 +1,7 @@
 <template>
 	<div id="app">
 		<h1>Tarefas</h1>
+    <TasksProgress :progress="progress" />
     <TaskNew @taskAdded="addTask"/>
     <TaskGrid :tasks="tasks"
         @taskDeleted="deleteTask"
@@ -11,9 +12,10 @@
 <script>
 import TaskNew from "@/components/TaskNew.vue";
 import TaskGrid from "@/components/TaskGrid.vue";
+import TasksProgress from "@/components/TasksProgress.vue";
 export default {
 
-  components: { TaskGrid, TaskNew },
+  components: { TaskGrid, TaskNew, TasksProgress },
 
   data(){
     return {
@@ -23,6 +25,13 @@ export default {
         {name: "T3", pending: false},
         {name: "T4", pending: true }
       ]
+    }
+  },
+  computed: {
+    progress(){
+      const total = this.tasks.length
+      const done = this.tasks.filter(t => !t.pending).length
+      return Math.round(done / total * 100) || 0
     }
   },
   methods: {
